@@ -53,3 +53,5 @@ else:
     dados = worksheet.get_all_records()
     df = pd.DataFrame(dados)
     st.dataframe(df)
+
+requirements.txt
