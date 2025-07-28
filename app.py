@@ -3,7 +3,7 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 
-# Autenticação com Google Sheets via secrets
+# Conexão com Google Sheets usando secrets
 scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/spreadsheets",
@@ -13,10 +13,14 @@ scope = [
 creds_dict = st.secrets["gcp_service_account"]
 credentials = Credentials.from_service_account_info(creds_dict, scopes=scope)
 gc = gspread.authorize(credentials)
-sh = gc.open("Radar de Problemas SGS")
-worksheet = sh.sheet1
 
-st.title("Radar de Problemas SGS")
+# Tentar abrir a planilha
+try:
+    sh = gc.open("Radar de Problemas SGS")
+    worksheet = sh.sheet1
+except Exception as e:
+    st.error("Erro ao conectar à planilha: verifique se o nome está correto e se a conta de serviço tem acesso.")
+    st.stop()
 
 # Login simples
 def autenticar():
@@ -33,6 +37,8 @@ def autenticar():
 if "logado" not in st.session_state:
     autenticar()
 else:
+    st.title("Radar de Problemas SGS")
+
     # Formulário
     with st.form("formulario"):
         nome = st.text_input("Responsável pela abertura")
