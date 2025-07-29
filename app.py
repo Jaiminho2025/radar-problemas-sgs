@@ -16,11 +16,10 @@ gc = gspread.authorize(credentials)
 
 # Tentar abrir a planilha
 try:
-    sheet = client.open("Radar de Problemas SGS").worksheet("Página1")
-
-    worksheet = sh.sheet1
+    sh = gc.open("Radar de Problemas SGS")             # ✅ Nome exato da planilha
+    worksheet = sh.worksheet("Página1")                # ✅ Nome exato da aba
 except Exception as e:
-    st.error("Erro ao conectar à planilha: verifique se o nome está correto e se a conta de serviço tem acesso.")
+    st.error(f"Erro ao conectar à planilha: {e}")
     st.stop()
 
 # Login simples
